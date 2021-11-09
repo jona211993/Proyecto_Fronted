@@ -4,6 +4,7 @@ import Home from "../views/Home.vue";
 import About from "../views/About.vue";
 import Postulantes from "../views/Postulantes.vue";
 import PostulanteUnico from "../views/PostulanteUnico.vue";
+import CreateEditPostulante from "../views/CreateEditPostulante"
 
 Vue.use(VueRouter);
 
@@ -18,6 +19,16 @@ const routes = [
     name: "postulantes-unique",
     component: PostulanteUnico,
   },
+  {
+    path: "/nuevo-postulante/:unique",
+    name: "nuevo-postulante-unique",
+    component: CreateEditPostulante
+  },
+  {
+    path: "/nuevo-postulante/",
+    name: "nuevo-postulante",
+    component: CreateEditPostulante
+  }
 ];
 
 const router = new VueRouter({

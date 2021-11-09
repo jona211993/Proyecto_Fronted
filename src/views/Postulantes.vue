@@ -5,9 +5,11 @@
     <!-- Cabecera -->
     <div class="container-header">
       <h1>Postulantes</h1>
-      <button type="button" class="btn btn-primary">
+      <router-link :to="{name: 'nuevo-postulante'}">
+        <button type="button" class="btn btn-primary">
         <i class="bi bi-plus"></i> Crear Postulante
       </button>
+      </router-link>
     </div>
     <hr />
 
@@ -86,9 +88,16 @@
                   <button type="button" class="btn btn-light mx-2">
                     <i class="bi bi-eye-fill"></i></button
                 ></router-link>
-                <button type="button" class="btn btn-success">
-                  <i class="bi bi-pen-fill"></i>
-                </button>
+                <router-link
+                  :to="{
+                    name: 'nuevo-postulante-unique',
+                    params: { unique: postulante._id },
+                  }"
+                >
+                  <button type="button" class="btn btn-success">
+                    <i class="bi bi-pen-fill"></i>
+                  </button>
+                </router-link>
               </div>
             </h5>
             <hr />
@@ -145,7 +154,7 @@
 </template>
 
 <style lang="scss" scoped>
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap");
 
 $background: #f5f6fa;
 $text: #9c9c9c;
