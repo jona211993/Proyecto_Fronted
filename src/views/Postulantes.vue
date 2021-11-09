@@ -77,9 +77,15 @@
             <h5 class="card-title">
               <span>{{ postulante.name }} {{ postulante.lastname }}</span>
               <div>
-                <button type="button" class="btn btn-light mx-2">
-                  <i class="bi bi-eye-fill"></i>
-                </button>
+                <router-link
+                  :to="{
+                    name: 'postulantes-unique',
+                    params: { unique: postulante._id },
+                  }"
+                >
+                  <button type="button" class="btn btn-light mx-2">
+                    <i class="bi bi-eye-fill"></i></button
+                ></router-link>
                 <button type="button" class="btn btn-success">
                   <i class="bi bi-pen-fill"></i>
                 </button>
@@ -94,7 +100,11 @@
             </p>
             <p><i class="bi bi-telephone-fill"></i> {{ postulante.celular }}</p>
             <p><i class="bi bi-card-checklist"></i> {{ postulante.dni }}</p>
-            <button type="button" class="btn btn-danger btn-delete">
+            <button
+              @click="showModal(postulante)"
+              type="button"
+              class="btn btn-danger btn-delete"
+            >
               <i class="bi bi-trash-fill"></i>
             </button>
           </div>
@@ -103,11 +113,12 @@
     </div>
 
     <!-- Modal -->
-    <div class="bg-modal hide">
+    <div class="bg-modal" :class="isModalActive ? '' : 'hide'">
       <div class="modal-container p-4">
         <div class="modal-mid">
-          <div class="modal-title">
-            ¿Seguro que quieres borrar este postulante?
+          <div class="modal-title" v-if="tempPostulante">
+            ¿Seguro que quieres borrar a {{ tempPostulante.name }}
+            {{ tempPostulante.lastname }}?
           </div>
           <hr />
           <div class="modal-cuerpo">
@@ -117,8 +128,14 @@
           </div>
         </div>
         <div class="modal-actions">
-          <button type="button" class="btn btn-secondary">Cancelar</button>
-          <button type="button" class="btn btn-danger">
+          <button type="button" class="btn btn-secondary" @click="closeModal">
+            Cancelar
+          </button>
+          <button
+            @click="deletePermanently"
+            type="button"
+            class="btn btn-danger"
+          >
             ELIMINAR Permanentemente
           </button>
         </div>
@@ -403,6 +420,8 @@ export default {
   data() {
     return {
       postulants: [],
+      tempPostulante: null,
+      isModalActive: false,
       filterQuery: "",
       filterType: "formacion",
     };
@@ -413,6 +432,27 @@ export default {
   },
 
   methods: {
+    async deletePermanently() {
+      try {
+        const response = await axios.delete(
+          `http://localhost:4000/Postulantes/${this.tempPostulante._id}`
+        );
+
+        this.closeModal();
+        this.getPostulantes();
+      } catch (err) {}
+    },
+
+    closeModal() {
+      this.isModalActive = false;
+      this.tempPostulante = null;
+    },
+
+    showModal(postulant) {
+      this.isModalActive = true;
+      this.tempPostulante = postulant;
+    },
+
     applyFilter() {
       if (!this.filterQuery) return;
 
